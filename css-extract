@@ -1,0 +1,23 @@
+#blend-in {
+  animation: fadein 0.15s;
+  -moz-animation: fadein 0.15s; /* Firefox */
+  -webkit-animation: fadein 0.15s; /* Safari and Chrome */
+  -o-animation: fadein 0.15s; /* Opera */
+}
+
+.grid-box-picturebox{ 
+  width:100%;
+  height: 100%; 
+  position: relative;       
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat; 
+}
+
+.grid-box-picture {
+  position: absolute;
+  top:0px;
+  width: 100%;
+  height: 220px;
+  background-color: #f0f0f0;
+}
