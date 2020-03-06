@@ -1,0 +1,65 @@
+<template>	
+    <router-link :class="className" @click.native="saveSingleProject" :to="{ path: '/' + project.projecturl }">
+        
+        <div class="grid-box-picturebox" 
+            id="blend-in"
+            v-if="project.basicData && project.basicData.imageurl && project.basicData.imageBuckets" 
+            v-bind:style="{ 'background-image': 'url(' + image + ')' }"
+            >        
+        </div>    
+
+        <!-- in case there is an error and we just don't have a valid imageurl or imageBucket, we create a gray background only -->
+        <div class="grid-box-picturebox"  v-if="!project.basicData || !project.basicData.imageurl"></div>
+    </router-link>              
+     
+</template>
+
+<script>
+
+//note, 'project' refers to both projects and articles
+
+export default {	
+     data(){
+        return{      
+            image: '',
+            imageUrl: '',
+            aws_url: process.env.AWS_URL
+        }
+    },      
+    props: {
+        className: '',
+    	project: {   }
+    },
+    created: function(){   
+        if (!this.project.projecturl) this.project.projecturl = '';            
+    },
+    mounted: function () {
+        this.setImage();
+    },
+    methods: {
+        saveSingleProject() {
+            var projectToSave = this.project;
+            projectToSave.mainData = {description: this.project.shortIntro};                  
+            this.$store.commit('saveSingleProjectFromLink', projectToSave);   
+        },
+        setImage() {
+             //load picture in background           
+            if (this.project.basicData && this.project.basicData.imageurl && this.project.basicData.imageBuckets) {
+                this.imageUrl = this.aws_url + '/img/' + this.project.basicData.imageBuckets[1] + '/' + this.project.basicData.imageurl + '.jpg';
+                this.image = '';
+                  
+
+                var that;
+                var highResImage = new Image();
+                that = this;
+
+                highResImage.onload = function(){
+                    that.image = that.imageUrl; // setting the attribute to image
+                }
+                highResImage.src = this.imageUrl; // loading the image
+            }   
+        }
+    }
+   
+}
+</script>
